@@ -1,6 +1,5 @@
 "use strict";
 
-const G=require("genasync"); // A package I wrote
 const JSZM=require("./jszm.js"); // version 2
 const readline=require("readline");
 const fs=require("fs");
@@ -8,26 +7,40 @@ const fs=require("fs");
 const In=readline.createInterface({input: process.stdin});
 const Out=process.stdout;
 
-G.defineER(fs,"readFile","readFileG",2);
-G.defineER(fs,"writeFile","writeFileG",3);
-G.defineR(In,"question","questionG",1);
+function run(iterator) {
+  const continuation = function(error, result) {
+    const current = error
+      ? iterator.throw(error)
+      : iterator.next(result);
+    
+    if (!current.done) {
+      return current.value(continuation);
+    }
+  };
+  
+  return continuation();
+};
 
-G.run((function*() {
-  var story=yield fs.readFileG(process.argv[2],{});
+const readFile = (path, options) => (done => fs.readFile(path, options, done));
+const writeFile = (path, data, options) => (done => fs.writeFile(path, data, options, done));
+const question = (query) => (done => In.question(query, answer => done(/* error */ null, /* result */ answer)));
+
+run((function*() {
+  var story=yield readFile(process.argv[2],{});
   var game=new JSZM(story);
   game.print=function*(x) {
     Out.write(x,"ascii");
   };
   game.read=function*() {
-    return yield In.questionG("");
+    return yield question("");
   };
   game.save=function*(x) {
     var n,e;
     Out.write("Save? ","ascii");
-    n=yield In.questionG("");
+    n=yield question("");
     if(!n) return false;
     try {
-      yield fs.writeFileG(n,new Buffer(x.buffer),{});
+      yield writeFile(n,new Buffer(x.buffer),{});
       return true;
     } catch(e) {
       return false;
@@ -36,10 +49,10 @@ G.run((function*() {
   game.restore=function*() {
     var n,e;
     Out.write("Restore? ","ascii");
-    n=yield In.questionG("");
+    n=yield question("");
     if(!n) return null;
     try {
-      return new Uint8Array(yield fs.readFileG(n,{}));
+      return new Uint8Array(yield readFile(n,{}));
     } catch(e) {
       return null;
     }

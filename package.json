@@ -4,7 +4,7 @@
   "description": "A public-domain Z-machine implementation written in JavaScript/ES6",
   "main": "example.js",
   "scripts": {
-     "test": "node example.js minizork.z3"
+    "test": "node example.js minizork.z3"
   },
   "repository": {
     "type": "git",
@@ -19,8 +19,5 @@
   "bugs": {
     "url": "https://github.com/DLehenbauer/jszm/issues"
   },
-  "homepage": "https://github.com/DLehenbauer/jszm#readme",
-  "devDependencies": {
-    "genasync": "^1.3.0"
-  }
+  "homepage": "https://github.com/DLehenbauer/jszm#readme"
 }
