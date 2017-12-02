@@ -26,8 +26,8 @@ const writeFile = (path, data, options) => (done => fs.writeFile(path, data, opt
 const question = (query) => (done => In.question(query, answer => done(/* error */ null, /* result */ answer)));
 
 run((function*() {
-  var story=yield readFile(process.argv[2],{});
-  var game=new JSZM(story);
+  const story=yield readFile(process.argv[2],{});
+  const game=new JSZM(story);
   game.print=function*(x) {
     Out.write(x,"ascii");
   };
@@ -35,8 +35,8 @@ run((function*() {
     return yield question("");
   };
   game.save=function*(x) {
-    var n;
-    var e;
+    let n;
+    let e;
     Out.write("Save? ","ascii");
     n=yield question("");
     if(!n) return false;
@@ -48,8 +48,8 @@ run((function*() {
     }
   };
   game.restore=function*() {
-    var n;
-    var e;
+    let n;
+    let e;
     Out.write("Restore? ","ascii");
     n=yield question("");
     if(!n) return null;

@@ -81,7 +81,7 @@
 const JSZM_Version={major:2,minor:0,subminor:2,timestamp:1480624305074};
 
 function JSZM(arr) {
-  var mem;
+  let mem;
   mem=this.memInit=new Uint8Array(arr);
   if(mem[0]!=3) throw new Error("Unsupported Z-code version.");
   this.byteSwapped=!!(mem[1]&1);
@@ -94,19 +94,19 @@ JSZM.prototype={
   byteSwapped: false,
   constructor: JSZM,
   deserialize(ar) {
-    var e;
-    var i;
-    var j;
-    var ds;
-    var cs;
-    var pc;
-    var vi;
-    var purbot;
-    var g8;
-    var g16s;
-    var g16;
-    var g24;
-    var g32;
+    let e;
+    let i;
+    let j;
+    let ds;
+    let cs;
+    let pc;
+    let vi;
+    let purbot;
+    let g8;
+    let g16s;
+    let g16;
+    let g24;
+    let g32;
     g8=()=>ar[e++];
     g16s=()=>(e+=2,vi.getInt16(e-2));
     g16=()=>(e+=2,vi.getUint16(e-2));
@@ -135,7 +135,7 @@ JSZM.prototype={
   endText: 0,
   fwords: null,
   *genPrint(text) {
-    var x=this.get(16);
+    const x=this.get(16);
     if(x!=this.savedFlags) {
       this.savedFlags=x;
       yield*this.highlight(!!(x&2));
@@ -144,12 +144,12 @@ JSZM.prototype={
   },
   get(x) { return this.view.getInt16(x,this.byteSwapped); },
   getText(addr) {
-    var d; // function to parse each Z-character
-    var o=""; // output
-    var ps=0; // permanent shift
-    var ts=0; // temporary shift
-    var w; // read each 16-bits data
-    var y; // auxiliary data for parsing state
+    let d; // function to parse each Z-character
+    let o=""; // output
+    let ps=0; // permanent shift
+    let ts=0; // temporary shift
+    let w; // read each 16-bits data
+    let y; // auxiliary data for parsing state
     d=v => {
       if(ts==3) {
         y=v<<5;
@@ -191,9 +191,9 @@ JSZM.prototype={
   },
   getu(x) { return this.view.getUint16(x,this.byteSwapped); },
   handleInput(str, t1, t2) {
-    var i;
-    var br;
-    var w;
+    let i;
+    let br;
+    let w;
     // Put text
     str=str.toLowerCase().slice(0,this.mem[t1]-1);
     for(i=0;i<str.length;i++) this.mem[t1+i+1]=str.charCodeAt(i);
@@ -213,8 +213,8 @@ JSZM.prototype={
   mem: null,
   memInit: null,
   parseVocab(s) {
-    var e;
-    var n;
+    let e;
+    let n;
     n=this.mem[s++];
     e=this.selfInsertingBreaks=String.fromCharCode(...this.mem.slice(s,s+n));
     e=e.split("").map(x=>(x.toUpperCase()==x.toLowerCase()?"":"\\")+x).join("")+"]";
@@ -238,39 +238,39 @@ JSZM.prototype={
   restarted: ()=>[],
   restore: ()=>[],
   *run() {
-    var mem;
-    var pc;
-    var cs;
-    var ds;
-    var op0;
-    var op1;
-    var op2;
-    var op3;
-    var opc;
-    var inst;
-    var x;
-    var y;
-    var z;
-    var globals;
-    var objects;
-    var fwords;
-    var defprop;
-    var addr;
-    var fetch;
-    var flagset;
-    var init;
-    var move;
-    var opfetch;
-    var pcfetch;
-    var pcget;
-    var pcgetb;
-    var pcgetu;
-    var predicate;
-    var propfind;
-    var ret;
-    var store;
-    var xfetch;
-    var xstore;
+    let mem;
+    let pc;
+    let cs;
+    let ds;
+    let op0;
+    let op1;
+    let op2;
+    let op3;
+    let opc;
+    let inst;
+    let x;
+    let y;
+    let z;
+    let globals;
+    let objects;
+    let fwords;
+    let defprop;
+    let addr;
+    let fetch;
+    let flagset;
+    let init;
+    let move;
+    let opfetch;
+    let pcfetch;
+    let pcget;
+    let pcgetb;
+    let pcgetu;
+    let predicate;
+    let propfind;
+    let ret;
+    let store;
+    let xfetch;
+    let xstore;
 
     // Functions
     addr=(x) => (x&65535)<<1;
@@ -302,8 +302,8 @@ JSZM.prototype={
       objects=defprop+55;
     };
     move=(x,y) => {
-      var w;
-      var z;
+      let w;
+      let z;
       // Remove from old FIRST-NEXT chain
       if(z=mem[objects+x*9+4]) {
         if(mem[objects+z*9+6]==x) { // is x.loc.first=x?
@@ -341,7 +341,7 @@ JSZM.prototype={
       return this.getu(pc-2);
     };
     predicate=(p) => {
-      var x=pcgetb();
+      let x=pcgetb();
       if(x&128) p=!p;
       if(x&64) x&=63; else x=((x&63)<<8)|pcgetb();
       if(p) return;
@@ -350,7 +350,7 @@ JSZM.prototype={
       pc+=x-2;
     };
     propfind=() => {
-      var z=this.getu(objects+op0*9+7);
+      let z=this.getu(objects+op0*9+7);
       z+=mem[z]*2+1;
       while(mem[z]) {
         if((mem[z]&31)==op1) {
@@ -370,7 +370,7 @@ JSZM.prototype={
       store(x);
     };
     store=(y) => {
-      var x=pcgetb();
+      const x=pcgetb();
       if(x==0) ds.push(y);
       else if(x<16) cs[0].local[x-1]=y;
       else this.put(globals+2*x,y);
@@ -662,11 +662,11 @@ JSZM.prototype={
   selfInsertingBreaks: null,
   serial: null,
   serialize(ds, cs, pc) {
-    var i;
-    var j;
-    var e;
-    var ar;
-    var vi;
+    let i;
+    let j;
+    let e;
+    let ar;
+    let vi;
     e=this.getu(14); // PURBOT
     i=e+cs.reduce((p,c)=>p+2*(c.ds.length+c.local.length)+6,0)+2*ds.length+8;
     ar=new Uint8Array(i);
@@ -692,9 +692,9 @@ JSZM.prototype={
   statusType: null,
   updateStatusLine: null,
   verify() {
-    var plenth=this.getu(26);
-    var pchksm=this.getu(28);
-    var i=64;
+    const plenth=this.getu(26);
+    let pchksm=this.getu(28);
+    let i=64;
     while(i<plenth*2) pchksm=(pchksm-this.memInit[i++])&65535;
     return !pchksm;
   },
