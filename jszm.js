@@ -94,8 +94,19 @@ JSZM.prototype={
   byteSwapped: false,
   constructor: JSZM,
   deserialize(ar) {
-    var e,i,j,ds,cs,pc,vi,purbot;
-    var g8,g16s,g16,g24,g32;
+    var e;
+    var i;
+    var j;
+    var ds;
+    var cs;
+    var pc;
+    var vi;
+    var purbot;
+    var g8;
+    var g16s;
+    var g16;
+    var g24;
+    var g32;
     g8=()=>ar[e++];
     g16s=()=>(e+=2,vi.getInt16(e-2));
     g16=()=>(e+=2,vi.getUint16(e-2));
@@ -180,7 +191,9 @@ JSZM.prototype={
   },
   getu(x) { return this.view.getUint16(x,this.byteSwapped); },
   handleInput(str, t1, t2) {
-    var i,br,w;
+    var i;
+    var br;
+    var w;
     // Put text
     str=str.toLowerCase().slice(0,this.mem[t1]-1);
     for(i=0;i<str.length;i++) this.mem[t1+i+1]=str.charCodeAt(i);
@@ -225,9 +238,39 @@ JSZM.prototype={
   restarted: ()=>[],
   restore: ()=>[],
   *run() {
-    var mem,pc,cs,ds,op0,op1,op2,op3,opc,inst,x,y,z;
-    var globals,objects,fwords,defprop;
-    var addr,fetch,flagset,init,move,opfetch,pcfetch,pcget,pcgetb,pcgetu,predicate,propfind,ret,store,xfetch,xstore;
+    var mem;
+    var pc;
+    var cs;
+    var ds;
+    var op0;
+    var op1;
+    var op2;
+    var op3;
+    var opc;
+    var inst;
+    var x;
+    var y;
+    var z;
+    var globals;
+    var objects;
+    var fwords;
+    var defprop;
+    var addr;
+    var fetch;
+    var flagset;
+    var init;
+    var move;
+    var opfetch;
+    var pcfetch;
+    var pcget;
+    var pcgetb;
+    var pcgetu;
+    var predicate;
+    var propfind;
+    var ret;
+    var store;
+    var xfetch;
+    var xstore;
 
     // Functions
     addr=(x) => (x&65535)<<1;
@@ -259,7 +302,8 @@ JSZM.prototype={
       objects=defprop+55;
     };
     move=(x,y) => {
-      var w,z;
+      var w;
+      var z;
       // Remove from old FIRST-NEXT chain
       if(z=mem[objects+x*9+4]) {
         if(mem[objects+z*9+6]==x) { // is x.loc.first=x?
@@ -612,14 +656,17 @@ JSZM.prototype={
           throw new Error("JSZM: Invalid Z-machine opcode");
       }
     }
-
   },
   save: ()=>[],
   savedFlags: 0,
   selfInsertingBreaks: null,
   serial: null,
   serialize(ds, cs, pc) {
-    var i,j,e,ar,vi;
+    var i;
+    var j;
+    var e;
+    var ar;
+    var vi;
     e=this.getu(14); // PURBOT
     i=e+cs.reduce((p,c)=>p+2*(c.ds.length+c.local.length)+6,0)+2*ds.length+8;
     ar=new Uint8Array(i);

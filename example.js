@@ -35,7 +35,8 @@ run((function*() {
     return yield question("");
   };
   game.save=function*(x) {
-    var n,e;
+    var n;
+    var e;
     Out.write("Save? ","ascii");
     n=yield question("");
     if(!n) return false;
@@ -47,7 +48,8 @@ run((function*() {
     }
   };
   game.restore=function*() {
-    var n,e;
+    var n;
+    var e;
     Out.write("Restore? ","ascii");
     n=yield question("");
     if(!n) return null;
