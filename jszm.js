@@ -585,7 +585,7 @@ JSZM.prototype={
         case 228: // READ
           yield*this.genPrint("");
           if(this.updateStatusLine) yield*this.updateStatusLine(this.getText(this.getu(objects+xfetch(16)*9+7)+1),xfetch(18),xfetch(17));
-          this.handleInput(yield*this.read(mem[op0&65535]),op0&65535,op1&65535);
+          this.handleInput((yield* this.read(mem[op0&65535])),op0&65535,op1&65535);
           break;
         case 229: // PRINTC
           yield*this.genPrint(op0==13?"\n":op0?String.fromCharCode(op0):"");

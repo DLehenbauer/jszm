@@ -8,7 +8,7 @@ const In=readline.createInterface({input: process.stdin});
 const Out=process.stdout;
 
 function run(iterator) {
-  const continuation = function(error, result) {
+  const continuation = (error, result) => {
     const current = error
       ? iterator.throw(error)
       : iterator.next(result);
