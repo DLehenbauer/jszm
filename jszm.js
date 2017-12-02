@@ -278,7 +278,7 @@ JSZM.prototype={
         mem[objects+x*9+5]=mem[objects+y*9+6]; // x.next=y.first
         mem[objects+y*9+6]=x; // y.first=x
       } else {
-        this.put(objects+x*9+5,0); // x.first=x.next=0
+        mem[objects+x*9+5]=0; // x.next=0
       }
     };
     opfetch=(x,y) => {
