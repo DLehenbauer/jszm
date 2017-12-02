@@ -93,7 +93,7 @@ function JSZM(arr) {
 JSZM.prototype={
   byteSwapped: false,
   constructor: JSZM,
-  deserialize: function(ar) {
+  deserialize(ar) {
     var e,i,j,ds,cs,pc,vi,purbot;
     var g8,g16s,g16,g24,g32;
     g8=()=>ar[e++];
@@ -123,7 +123,7 @@ JSZM.prototype={
   },
   endText: 0,
   fwords: null,
-  genPrint: function*(text) {
+  *genPrint(text) {
     var x=this.get(16);
     if(x!=this.savedFlags) {
       this.savedFlags=x;
@@ -131,8 +131,8 @@ JSZM.prototype={
     }
     yield*this.print(text,!!(x&1));
   },
-  get: function(x) { return this.view.getInt16(x,this.byteSwapped); },
-  getText: function(addr) {
+  get(x) { return this.view.getInt16(x,this.byteSwapped); },
+  getText(addr) {
     var d; // function to parse each Z-character
     var o=""; // output
     var ps=0; // permanent shift
@@ -178,8 +178,8 @@ JSZM.prototype={
     this.endText=addr;
     return o;
   },
-  getu: function(x) { return this.view.getUint16(x,this.byteSwapped); },
-  handleInput: function(str,t1,t2) {
+  getu(x) { return this.view.getUint16(x,this.byteSwapped); },
+  handleInput(str, t1, t2) {
     var i,br,w;
     // Put text
     str=str.toLowerCase().slice(0,this.mem[t1]-1);
@@ -199,7 +199,7 @@ JSZM.prototype={
   isTandy: false,
   mem: null,
   memInit: null,
-  parseVocab: function(s) {
+  parseVocab(s) {
     var e;
     var n;
     n=this.mem[s++];
@@ -218,13 +218,13 @@ JSZM.prototype={
     return s;
   },
   print: ()=>[],
-  put: function(x,y) { return this.view.setInt16(x,y,this.byteSwapped); },
-  putu: function(x,y) { return this.view.setUint16(x,y&65535,this.byteSwapped); },
+  put(x, y) { return this.view.setInt16(x,y,this.byteSwapped); },
+  putu(x, y) { return this.view.setUint16(x,y&65535,this.byteSwapped); },
   read: ()=>[],
   regBreak: null,
   restarted: ()=>[],
   restore: ()=>[],
-  run: function*() {
+  *run() {
     var mem,pc,cs,ds,op0,op1,op2,op3,opc,inst,x,y,z;
     var globals,objects,fwords,defprop;
     var addr,fetch,flagset,init,move,opfetch,pcfetch,pcget,pcgetb,pcgetu,predicate,propfind,ret,store,xfetch,xstore;
@@ -618,7 +618,7 @@ JSZM.prototype={
   savedFlags: 0,
   selfInsertingBreaks: null,
   serial: null,
-  serialize: function(ds,cs,pc) {
+  serialize(ds, cs, pc) {
     var i,j,e,ar,vi;
     e=this.getu(14); // PURBOT
     i=e+cs.reduce((p,c)=>p+2*(c.ds.length+c.local.length)+6,0)+2*ds.length+8;
@@ -644,7 +644,7 @@ JSZM.prototype={
   split: null,
   statusType: null,
   updateStatusLine: null,
-  verify: function() {
+  verify() {
     var plenth=this.getu(26);
     var pchksm=this.getu(28);
     var i=64;
