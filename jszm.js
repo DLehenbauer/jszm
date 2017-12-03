@@ -241,6 +241,9 @@ JSZM.prototype={
       op2=objects+op0*9+(op1&16?2:0);
       opc=this.get(op2);
     };
+    const initRng = () => {
+      this.seed = (Math.random() * 0xFFFFFFFF) >>> 0;      
+    };
     init=() => {
       mem=this.mem=new Uint8Array(this.memInit);
       this.view=new DataView(mem.buffer);
@@ -594,7 +597,17 @@ JSZM.prototype={
           yield*this.genPrint(String(op0));
           break;
         case 231: // RANDOM
-          store(op0>0?Math.floor(Math.random()*op0)+1:0);
+          if (op0 <= 0) {
+            if (op0 === 0) {
+              initRng();                // If 0, reseed using Math.random().
+            } else {
+              this.seed = (op0 >>> 0);  // If negative, seed the PRNG to the specified value and return 0.
+              store(0);
+              break;
+            }
+          }
+          this.seed = (1664525 * this.seed + 1013904223) >>> 0;     // Linear congruential generator
+          store(Math.floor((this.seed / 0xFFFFFFFF) * op0) + 1);    // Return integer in range [1..op0] (inclusive).
           break;
         case 232: // PUSH
           ds.push(op0);
