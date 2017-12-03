@@ -85,10 +85,10 @@ class JSZM {
     let mem;
     mem=this.memInit=new Uint8Array(arr);
     if(mem[0]!=3) throw new Error("Unsupported Z-code version.");
-    this.byteSwapped=!!(mem[1]&1);
+    this.littleEndian=!!(mem[1]&1);
     this.statusType=!!(mem[1]&2);
     this.serial=String.fromCharCode(...mem.slice(18,24));
-    this.zorkid=(mem[2]<<(this.byteSwapped?0:8))|(mem[3]<<(this.byteSwapped?8:0));
+    this.zorkid=(mem[2]<<(this.littleEndian?0:8))|(mem[3]<<(this.littleEndian?8:0));
   }
 
   deserialize(ar) {
@@ -140,7 +140,7 @@ class JSZM {
     yield*this.print(text,!!(x&1));
   }
 
-  get(x) { return this.view.getInt16(x,this.byteSwapped); }
+  get(x) { return this.view.getInt16(x,this.littleEndian); }
 
   getText(addr) {
     let d; // function to parse each Z-character
@@ -189,7 +189,7 @@ class JSZM {
     return o;
   }
 
-  getu(x) { return this.view.getUint16(x,this.byteSwapped); }
+  getu(x) { return this.view.getUint16(x,this.littleEndian); }
 
   handleInput(str, t1, t2) {
     let i;
@@ -237,8 +237,8 @@ class JSZM {
     return [];
   }
 
-  put(x, y) { return this.view.setInt16(x,y,this.byteSwapped); }
-  putu(x, y) { return this.view.setUint16(x,y&65535,this.byteSwapped); }
+  put(x, y) { return this.view.setInt16(x,y,this.littleEndian); }
+  putu(x, y) { return this.view.setUint16(x,y&65535,this.littleEndian); }
 
   read() {
     return [];
