@@ -264,37 +264,19 @@ class JSZM {
     let opc;
     let inst;
     let x;
-    let y;
-    let z;
     let globals;
     let objects;
     let fwords;
     let defprop;
-    let addr;
-    let fetch;
-    let flagset;
-    let init;
-    let move;
-    let opfetch;
-    let pcfetch;
-    let pcget;
-    let pcgetb;
-    let pcgetu;
-    let predicate;
-    let propfind;
-    let ret;
-    let store;
-    let xfetch;
-    let xstore;
 
     // Functions
-    addr=(x) => (x&65535)<<1;
-    fetch=(x) => {
+    const addr=(x) => (x&65535)<<1;
+    const fetch=(x) => {
       if(x==0) return ds.pop();
       if(x<16) return cs[0].local[x-1];
       return this.get(globals+2*x);
     };
-    flagset=() => {
+    const flagset=() => {
       op3=1<<(15&~op1);
       op2=objects+op0*9+(op1&16?2:0);
       opc=this.get(op2);
@@ -302,7 +284,7 @@ class JSZM {
     const initRng = () => {
       this.seed = (Math.random() * 0xFFFFFFFF) >>> 0;      
     };
-    init=() => {
+    const init=() => {
       mem=this.mem=new Uint8Array(this.memInit);
       this.view=new DataView(mem.buffer);
       mem[1]&=3;
@@ -319,7 +301,7 @@ class JSZM {
       pc=this.getu(6);
       objects=defprop+55;
     };
-    move=(x,y) => {
+    const move=(x,y) => {
       let w;
       let z;
       // Remove from old FIRST-NEXT chain
@@ -343,22 +325,22 @@ class JSZM {
         mem[objects+x*9+5]=0; // x.next=0
       }
     };
-    opfetch=(x,y) => {
+    const opfetch=(x,y) => {
       if((x&=3)==3) return;
       opc=y;
       return [pcget,pcgetb,pcfetch][x]();
     };
-    pcfetch=(x) => fetch(mem[pc++]);
-    pcget=() => {
+    const pcfetch=(x) => fetch(mem[pc++]);
+    const pcget=() => {
       pc+=2;
       return this.get(pc-2);
     };
-    pcgetb=() => mem[pc++];
-    pcgetu=() => {
+    const pcgetb=() => mem[pc++];
+    const pcgetu=() => {
       pc+=2;
       return this.getu(pc-2);
     };
-    predicate=(p) => {
+    const predicate=(p) => {
       let x=pcgetb();
       if(x&128) p=!p;
       if(x&64) x&=63; else x=((x&63)<<8)|pcgetb();
@@ -367,7 +349,7 @@ class JSZM {
       if(x&0x2000) x-=0x4000;
       pc+=x-2;
     };
-    propfind=() => {
+    const propfind=() => {
       let z=this.getu(objects+op0*9+7);
       z+=mem[z]*2+1;
       while(mem[z]) {
@@ -381,24 +363,24 @@ class JSZM {
       op3=0;
       return false;
     };
-    ret=(x) => {
+    const ret=(x) => {
       ds=cs[0].ds;
       pc=cs[0].pc;
       cs.shift();
       store(x);
     };
-    store=(y) => {
+    const store=(y) => {
       const x=pcgetb();
       if(x==0) ds.push(y);
       else if(x<16) cs[0].local[x-1]=y;
       else this.put(globals+2*x,y);
     };
-    xfetch=(x) => {
+    const xfetch=(x) => {
       if(x==0) return ds[ds.length-1];
       if(x<16) return cs[0].local[x-1];
       return this.get(globals+2*x);
     };
-    xstore=(x,y) => {
+    const xstore=(x,y) => {
       if(x==0) ds[ds.length-1]=y;
       else if(x<16) cs[0].local[x-1]=y;
       else this.put(globals+2*x,y);
