@@ -1,8 +1,8 @@
 {
   "name": "jszm",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A public-domain Z-machine implementation written in JavaScript/ES6",
-  "main": "example.js",
+  "main": "index.js",
   "scripts": {
     "test": "node example.js tests/czech_0_8/czech.z3"
   },
