@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "CZECH 0.8",
-            "program": "${workspaceFolder}\\example.js",
+            "program": "${workspaceFolder}/example.js",
             "args": [
                 "tests/czech_0_8/czech.z3"
             ],
