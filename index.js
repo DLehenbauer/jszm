@@ -78,7 +78,7 @@
 
 "use strict";
 
-const JSZM_Version={major:2,minor:0,subminor:2,timestamp:1480624305074};
+const JSZM_Version = { major: 2, minor: 0, subminor: 3, timestamp: 1480624305074 };
 
 class JSZM {
   constructor(arr) {

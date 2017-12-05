@@ -1,8 +1,8 @@
 "use strict";
 
-const JSZM=require("./jszm.js"); // version 2
 const readline=require("readline");
 const fs=require("fs");
+const JSZM = require('./index'); // version 2
 
 const In=readline.createInterface({input: process.stdin});
 const Out=process.stdout;

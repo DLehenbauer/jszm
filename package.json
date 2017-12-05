@@ -4,7 +4,8 @@
   "description": "A public-domain Z-machine implementation written in JavaScript/ES6",
   "main": "index.js",
   "scripts": {
-    "test": "node example.js tests/czech_0_8/czech.z3"
+    "test": "node example.js tests/czech_0_8/czech.z3",
+    "zork": "node example.js tests/minizork.z3",
   },
   "repository": {
     "type": "git",
