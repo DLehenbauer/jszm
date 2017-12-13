@@ -200,6 +200,13 @@ JSZM.prototype={
   mem: null,
   memInit: null,
   parseVocab: function(s) {
+    this.vocabulary=new Map();
+    
+    if (s === 0) {                                    // If the story file does not contain a dictionary..
+      this.regBreak=new RegExp("[^ \\n\\t]+","g");    //   use the default word separators
+      return;                                         //   and early exit.
+    }
+
     var e;
     var n;
     n=this.mem[s++];
@@ -210,12 +217,10 @@ JSZM.prototype={
     e=this.mem[s++];
     n=this.get(s);
     s+=2;
-    this.vocabulary=new Map();
     while(n--) {
       this.vocabulary.set(this.getText(s),s);
       s+=e;
     }
-    return s;
   },
   print: ()=>[],
   put: function(x,y) { return this.view.setInt16(x,y,this.byteSwapped); },
