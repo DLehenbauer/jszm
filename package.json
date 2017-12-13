@@ -1,8 +1,7 @@
 {
   "name": "jszm",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A public-domain Z-machine implementation written in JavaScript/ES6",
-  "main": "example.js",
   "scripts": {
      "test": "node example.js minizork.z3"
   },
