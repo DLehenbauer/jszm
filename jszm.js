@@ -265,6 +265,7 @@ JSZM.prototype={
       ds=[];
       pc=this.getu(6);
       objects=defprop+55;
+      initRng();
     };
     move=(x,y) => {
       var w,z;
@@ -602,14 +603,14 @@ JSZM.prototype={
           yield*this.genPrint(String(op0));
           break;
         case 231: // RANDOM
-          if (op0 <= 0) {
+          if (op0 <= 0) {               // If 'op0' is non-positive, reseed the PRNG.
             if (op0 === 0) {
-              initRng();                // If 0, reseed using Math.random().
+              initRng();                // If 0, seed using Math.random().
             } else {
-              this.seed = (op0 >>> 0);  // If negative, seed the PRNG to the specified value and return 0.
-              store(0);
-              break;
+              this.seed = (op0 >>> 0);  // If negative, seed with the specified value.
             }
+            store(0);                   // Reseeding always returns 0.
+            break;
           }
           this.seed = (1664525 * this.seed + 1013904223) >>> 0;     // Linear congruential generator
           store(Math.floor((this.seed / 0xFFFFFFFF) * op0) + 1);    // Return integer in range [1..op0] (inclusive).
